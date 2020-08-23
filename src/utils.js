@@ -18,45 +18,50 @@ const getArguments = cliArgs => {
 
   let test = 'test'
 
-  if (cliArgs.length === 1 && isUrlOrPort(cliArgs[0])) {
-    // passed just single url or port number, for example
-    // "start": "http://localhost:8080"
-    service.url = normalizeUrl(cliArgs[0])
-  } else if (cliArgs.length === 2) {
-    if (isUrlOrPort(cliArgs[0])) {
-      // passed port and custom test command
-      // like ":8080 test-ci"
-      service.url = normalizeUrl(cliArgs[0])
-      test = cliArgs[1]
-    }
-    if (isUrlOrPort(cliArgs[1])) {
-      // passed start command and url/port
-      // like "start-server 8080"
-      service.start = cliArgs[0]
-      service.url = normalizeUrl(cliArgs[1])
-    }
-  } else if (cliArgs.length === 5) {
-    service.start = cliArgs[0]
-    service.url = normalizeUrl(cliArgs[1])
+//   if (cliArgs.length === 1 && isUrlOrPort(cliArgs[0])) {
+//     // passed just single url or port number, for example
+//     // "start": "http://localhost:8080"
+//     service.url = normalizeUrl(cliArgs[0])
+//   } else if (cliArgs.length === 2) {
+//     if (isUrlOrPort(cliArgs[0])) {
+//       // passed port and custom test command
+//       // like ":8080 test-ci"
+//       service.url = normalizeUrl(cliArgs[0])
+//       test = cliArgs[1]
+//     }
+//     if (isUrlOrPort(cliArgs[1])) {
+//       // passed start command and url/port
+//       // like "start-server 8080"
+//       service.start = cliArgs[0]
+//       service.url = normalizeUrl(cliArgs[1])
+//     }
+//   } else if (cliArgs.length === 5) {
+//     service.start = cliArgs[0]
+//     service.url = normalizeUrl(cliArgs[1])
 
-    const secondService = {
-      start: cliArgs[2],
-      url: normalizeUrl(cliArgs[3])
-    }
-    services.push(secondService)
+//     const secondService = {
+//       start: cliArgs[2],
+//       url: normalizeUrl(cliArgs[3])
+//     }
+//     services.push(secondService)
 
-    test = cliArgs[4]
-  } else {
-    la(
-      cliArgs.length === 3,
-      'expected <NPM script name that starts server> <url or port> <NPM script name that runs tests>\n',
-      'example: start-test start 8080 test\n',
-      'see https://github.com/bahmutov/start-server-and-test#use\n'
-    )
-    service.start = cliArgs[0]
-    service.url = normalizeUrl(cliArgs[1])
-    test = cliArgs[2]
-  }
+//     test = cliArgs[4]
+//   } else {
+//     la(
+//       cliArgs.length === 3,
+//       'expected <NPM script name that starts server> <url or port> <NPM script name that runs tests>\n',
+//       'example: start-test start 8080 test\n',
+//       'see https://github.com/bahmutov/start-server-and-test#use\n'
+//     )
+//     service.start = cliArgs[0]
+//     service.url = normalizeUrl(cliArgs[1])
+//     test = cliArgs[2]
+//   }
+  
+  service.start = cliArgs[0]
+  service.url = `http://localhost:${process.env.TSERVER_PORT || '8000'}/tserver/ping`
+  test = cliArgs[1]
+  
 
   services.forEach(service => {
     service.start = normalizeCommand(service.start)
